@@ -88,9 +88,27 @@ const getGameById = (async (req, res) => {
     }
   })
 
+  const endGame = (async (req, res) => {
+    try {
+      await db.query('BEGIN')
+      const { id_game,id_user } = req.body 
+
+      await db.query('UPDATE game SET status = $1, winner = $2 WHERE id = $3',[2,id_user,id_game]);
+      await db.query('COMMIT')
+
+      res.json({ message: 'Partida finalizada' });
+     
+    } catch (err) {
+      await db.query('ROLLBACK')
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+    }
+  })
+
 module.exports = {
    createGame,
    getGameById,
    saveRound,
-   getStartedGames
+   getStartedGames,
+   endGame
 }
