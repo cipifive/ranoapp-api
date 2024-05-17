@@ -16,7 +16,7 @@ const {
 } = require('./controllers/game_controller')
 
 const {
-  getRankingTable
+  getRankingTable, getStatsByUser
 } = require('./controllers/stats_controller')
 
 
@@ -47,6 +47,7 @@ app.post('/save_round', saveRound)
 app.put('/end_game', endGame)
 
 app.get('/get_ranking', getRankingTable)
+app.get('/get_stats_by_user_id/:id', getStatsByUser)
 
 
 // Start the server and listen to the port
