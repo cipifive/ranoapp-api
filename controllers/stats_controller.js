@@ -12,7 +12,7 @@ const getRankingTable = (async (req, res) => {
         ...user,
         wins: parseFloat(userWins.rows[0].count),
         games: parseFloat(userGames.rows[0].count),
-        ratio: (parseFloat(userWins.rows[0].count) / parseFloat(userGames.rows[0].count)) * 100
+        ratio: isNaN((parseFloat(userWins.rows[0].count) / parseFloat(userGames.rows[0].count)) * 100)  ? 0 : (parseFloat(userWins.rows[0].count) / parseFloat(userGames.rows[0].count)) * 100 
       }
     })
     const usuarios = await Promise.all(usersPromises);
@@ -33,7 +33,6 @@ const getStatsByUser = (async (req, res) => {
     const userBoxes = await db.query('SELECT boxes FROM game_round WHERE id_user = $1',[id])
 
     const boxesArray = userBoxes.rows.map(row => JSON.parse(row.boxes))
-    console.log(boxesArray)
     const allBoxes = [].concat(...boxesArray);
     const totalCount = allBoxes.length;
 
@@ -67,47 +66,47 @@ const getStatsByUser = (async (req, res) => {
     let response = {
         wins: parseFloat(userWins.rows[0].count),
         games: parseFloat(userGames.rows[0].count),
-        points: parseInt(userTotalPoints.rows[0].total_points),
+        points: isNaN(parseInt(userTotalPoints.rows[0].total_points)) ? 0 : parseInt(userTotalPoints.rows[0].total_points) ,
         shots: totalCount,
         hole_1: {
           count: hole_count_1,
-          percent: hole_percent_1.toFixed(2)
+          percent: isNaN(hole_percent_1.toFixed(2)) ? 0 : hole_percent_1.toFixed(2)
         },
         hole_2: {
           count: hole_count_2,
-          percent: hole_percent_2.toFixed(2)
+          percent: isNaN(hole_percent_2.toFixed(2)) ? 0 : hole_percent_2.toFixed(2)
         },
         hole_3: {
           count: hole_count_3,
-          percent: hole_percent_3.toFixed(2)
+          percent: isNaN(hole_percent_3.toFixed(2)) ? 0 : hole_percent_3.toFixed(2)
         },
         hole_4: {
           count: hole_count_4,
-          percent: hole_percent_4.toFixed(2)
+          percent: isNaN(hole_percent_4.toFixed(2)) ? 0 : hole_percent_4.toFixed(2)
         },
         hole_6: {
           count: hole_count_6,
-          percent: hole_percent_6.toFixed(2)
+          percent: isNaN(hole_percent_6.toFixed(2)) ? 0 : hole_percent_6.toFixed(2)
         },
         frog: {
           count: frog_count,
-          percent: frog_percent.toFixed(2)
+          percent: isNaN(frog_percent.toFixed(2)) ? 0 : frog_percent.toFixed(2)
         },
         bridge_7: {
           count: bridge_count_7,
-          percent: bridge_percent_7.toFixed(2)
+          percent: isNaN(bridge_percent_7.toFixed(2)) ? 0 : bridge_percent_7.toFixed(2)
         },
         bridge_9: {
           count: bridge_count_9,
-          percent: bridge_percent_9.toFixed(2)
+          percent: isNaN(bridge_percent_9.toFixed(2)) ? 0 : bridge_percent_9.toFixed(2)
         },
         mill: {
           count: mill_count,
-          percent: mill_percent.toFixed(2)
+          percent: isNaN(mill_percent.toFixed(2)) ? 0 : mill_percent.toFixed(2)
         },
         out: {
           count: out_count,
-          percent: out_percent.toFixed(2)
+          percent: isNaN(out_percent.toFixed(2)) ? 0 : out_percent.toFixed(2)
         },
     }
     

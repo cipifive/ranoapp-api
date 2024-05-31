@@ -59,6 +59,21 @@ const getGameById = (async (req, res) => {
       }
   })
 
+  const getPlayerRound = (async (req, res) => {
+    try {
+      const { id_user,id_round, id_game } = req.body 
+
+      const ronda = await db.query('SELECT * FROM game_round WHERE id_game = $1 AND id_user = $2 AND id_round = $3  ', [id_game,id_user,id_round]);
+       
+      res.json({code :200, data: ronda.rows[0], message: 'Información de la ronda' });
+     
+    } catch (err) {
+      await db.query('ROLLBACK')
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+    }
+  })
+
   const getStartedGames = (async (req, res) => {
     try {
         
@@ -88,6 +103,22 @@ const getGameById = (async (req, res) => {
     }
   })
 
+  const updateRound = (async (req, res) => {
+    try {
+      await db.query('BEGIN')
+      const { id_game,id_user,id_round,points,boxes } = req.body 
+      await db.query('UPDATE game_round SET points = $1, boxes = $2 WHERE id_game = $3 AND id_user = $4 AND id_round = $5',[points, boxes, id_game, id_user, id_round]) 
+      await db.query('COMMIT')
+        
+      res.json({ message: 'Ronda actualizada' });
+     
+    } catch (err) {
+      await db.query('ROLLBACK')
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+    }
+  })
+
   const endGame = (async (req, res) => {
     try {
       await db.query('BEGIN')
@@ -108,7 +139,9 @@ const getGameById = (async (req, res) => {
 module.exports = {
    createGame,
    getGameById,
+   getPlayerRound,
    saveRound,
+   updateRound,
    getStartedGames,
    endGame
 }

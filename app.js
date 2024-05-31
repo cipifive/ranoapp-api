@@ -12,7 +12,7 @@ const {
 } = require('./controllers/user_controller')
 
 const {
-  createGame, getGameById, saveRound, getStartedGames, endGame
+  createGame, getGameById, getPlayerRound, saveRound, updateRound, getStartedGames, endGame
 } = require('./controllers/game_controller')
 
 const {
@@ -42,8 +42,10 @@ app.put('/update_user', updateUser)
 
 app.post('/create_game', createGame)
 app.get('/get_game_by_id/:id', getGameById)
+app.post('/get_player_round', getPlayerRound)
 app.get('/get_started_games', getStartedGames)
 app.post('/save_round', saveRound)
+app.put('/update_round', updateRound)
 app.put('/end_game', endGame)
 
 app.get('/get_ranking', getRankingTable)
